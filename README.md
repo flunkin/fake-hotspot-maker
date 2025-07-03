@@ -1,4 +1,4 @@
- #Ubuntu/debain Decoy Hotspot script
+ # Ubuntu/debain Decoy Hotspot script
  
 ∘ turn the script into executable, "chmod +x start_hotspot.sh"
 
