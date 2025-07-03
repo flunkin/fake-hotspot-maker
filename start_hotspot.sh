@@ -1,41 +1,41 @@
 #!/bin/bash
 
-# this script starts a wifi hotspot using nmcli command from NetworkManager
+# this script starts a wifi hotspot using nmcli cmds
 
 IFACE="wlan0"
 SSID="FlunkinWiFi"
 
-# if first argument given, use as interface
+# use 1st input as interface
 if [ ! -z "$1" ]; then
   IFACE=$1
 fi
 
-# if second argument given, use as SSID
+# use 2nd input as ssid
 if [ ! -z "$2" ]; then
   SSID=$2
 fi
 
 echo "starting hotspot with ssid='$SSID' on interface='$IFACE'..."
 
-# check for nmcli command existence
+# check for nmcli 
 if ! which nmcli > /dev/null 2>&1; then
   echo "error: nmcli command not found. get NetworkManager."
   exit 1
 fi
 
-# check if the interface exists
+# check the interface is even real
 if ! ip link show $IFACE > /dev/null 2>&1; then
   echo "error: network interface '$IFACE' does not exist."
   exit 1
 fi
 
-# see if interface is down, if yes, bring it up
+# if interface is down then bring it up
 STATE=$(ip link show $IFACE | grep -o "state DOWN")
 if [ "$STATE" = "state DOWN" ]; then
   sudo ip link set $IFACE up
 fi
 
-# start hotspot without password, discard output
+# start hotspot with no password/encryption
 nmcli device wifi hotspot ifname $IFACE ssid $SSID band bg password "" > /dev/null 2>&1
 RET=$?
 
